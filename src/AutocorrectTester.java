@@ -31,6 +31,20 @@ public class AutocorrectTester {
     public void testLarger() {
         setTestData(2);
         studentSolution = new Autocorrect(dictionary, threshold);
+        String[] words = studentSolution.runTest(typed);
+        for (int i = 0; i < matches.length; i++) {
+            boolean found = false;
+            for (int j = 0; j < words.length; j++) {
+                if (words[j].equals(matches[i])) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                System.out.println(matches[i]);
+            }
+        }
+
         assertArrayEquals(matches, studentSolution.runTest(typed), "Incorrect words returned.");
     }
 
@@ -50,6 +64,17 @@ public class AutocorrectTester {
             System.out.println("Error opening test file " + test + ".txt");
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        BufferedReader testReader = new BufferedReader(new FileReader("dictionaries/large.txt"));
+        AutocorrectTester tester = new AutocorrectTester();
+        String[] dictionary = tester.loadWords(testReader);
+
+        Autocorrect autocorrect = new Autocorrect(dictionary, 2);
+
+        while (1 == 1)
+            autocorrect.prompt();
     }
 
     private String[] loadWords(BufferedReader br) {
